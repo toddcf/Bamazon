@@ -1,0 +1,20 @@
+{
+  "name": "Bamazon",
+  "version": "1.0.0",
+  "description": "An Amazon-like storefront using MySQL that takes in orders from customers and depletes stock from the store's inventory.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toddcf/Bamazon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/toddcf/Bamazon/issues"
+  },
+  "homepage": "https://github.com/toddcf/Bamazon#readme"
+}
