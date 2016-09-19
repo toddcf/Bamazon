@@ -15,6 +15,12 @@ connection.connect(function(err) {
     runSearch();
 })
 
+var next = false;
+var ItemID;
+var ProductName;
+var Price;
+var StockQuantity;
+
 var runBamazon = function() {
 	// Running this application will first display all of the items 
 	// available for sale. Include the ids, names, and prices of 
@@ -39,6 +45,7 @@ var runBamazon = function() {
         		message: 	"Please enter the ID number of the product would you like to purchase:",
         		choices: [	"" /*DO I USE A FOR LOOP?*/
         		]
+    		// Do I have to call the following answer1 and answer2?
         	}).then(function(answer) {
         		// The second message should ask how many units of the product they would like to buy.
         		inquirer.prompt({
@@ -47,18 +54,26 @@ var runBamazon = function() {
         			message: 	"Excellent choice. How many would you like to purchase?"
         		})
         	}).then(function(answer) {
-        		// Check if your store has enough of the product to meet the customer's request.
+        		// Check if your store has enough of the product to meet the 
+        		// customer's request.
         		// NOT SURE THIS IS CORRECT:
-        		var query = 'SELECT StockQuantity FROM Products HAVING count(*) > 1';
-        		// If not, the app should log a phrase like Insufficient quantity!, 
-				// and then prevent the order from going through.
+        		var query = 'SELECT ItemID FROM Products';
+        		connection.query(query, [answer.ItemID, answer.StockQuantity], function(err, res) {
+        			if (answer.StockQuantity < 1) {
+        				console.log("Apologies -- you have selected an item that is out of stock. Could we interest you in something else instead?");
+        				// PREVENT THE ORDER FROM GOING THROUGH.
+        				// RESET.
+        			} else {
+        				// Fulfill order by updating this item's StockQuantity in the SQL 
+        				// database to reflect the remaining quantity.
 
-				// However, if your store does have enough of the product, you should 
-				// fulfill the customer's order.  This means updating the SQL 
-				// database to reflect the remaining quantity.
+        				// Once the update goes through, show the customer the total cost 
+						// of their purchase.		
+        			}
 
-				// Once the update goes through, show the customer the total cost 
-				// of their purchase.
+				
+				
+				})
 			})
         })
 }
