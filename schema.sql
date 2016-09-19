@@ -31,3 +31,5 @@ INSERT INTO Products (ProductName, DepartmentName, Price, StockQuantity)
 	VALUES ('Sonicare', 'Toothbrushes', 99.95, 2);
 INSERT INTO Products (ProductName, DepartmentName, Price, StockQuantity) 
 	VALUES ('Braun Series 7', 'Electric Shavers', 169.98, 2);
+
+SELECT * FROM Products;

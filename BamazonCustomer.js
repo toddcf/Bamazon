@@ -40,7 +40,8 @@ var runBamazon = function() {
         	// The app should then prompt users with two messages.
         	// The first should ask them the ID of the product they would like to buy.
         	inquirer.prompt({
-        		name: 		"action",
+        		// WHAT ARE THE RULES FOR THE NAME?
+        		name: 		"itemID",
         		type: 		"input",
         		message: 	"Please enter the ID number of the product would you like to purchase:",
         		choices: [	"" /*DO I USE A FOR LOOP?*/
@@ -49,7 +50,7 @@ var runBamazon = function() {
         	}).then(function(answer) {
         		// The second message should ask how many units of the product they would like to buy.
         		inquirer.prompt({
-        			name: 		"action",
+        			name: 		"quantityRequest",
         			type: 		"input",
         			message: 	"Excellent choice. How many would you like to purchase?"
         		})
