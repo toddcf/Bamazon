@@ -12,69 +12,81 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
     if (err) throw err;
-    runSearch();
+    runBamazon();
 })
 
 var next = false;
 var ItemID;
 var ProductName;
 var Price;
-var StockQuantity;
+var Inventory;
 
 var runBamazon = function() {
-	// Running this application will first display all of the items 
-	// available for sale. Include the ids, names, and prices of 
-	// products for sale.
-	
-	// CHECK IF THIS QUERY IS DONE CORRECTLY::
+	// CHECK IF THIS QUERY IS DONE CORRECTLY:
 	var query = 'SELECT * FROM Bamazon';
 	connection.query(query, function(err, res) {
-        console.log("Available Products: ");
-        for (var i = 0; i < res.length; i++) {
-            console.log(
-            	"ItemID: " res[i].ItemID + 
-            	" || Product: " + res[i].ProductName + 
-            	" || Price: " + res[i].Price + 
-            	" || Qty: " + res[i].StockQuantity);
+        // Display all items available to the customer:
+        showStock();
         }.then(function(answer) {
-        	// The app should then prompt users with two messages.
-        	// The first should ask them the ID of the product they would like to buy.
-        	inquirer.prompt({
-        		// WHAT ARE THE RULES FOR THE NAME?
-        		name: 		"itemID",
-        		type: 		"input",
-        		message: 	"Please enter the ID number of the product would you like to purchase:",
-        		choices: [	"" /*DO I USE A FOR LOOP?*/
-        		]
-    		// Do I have to call the following answer1 and answer2?
+        	// Q1: Ask user the ID of the product they would like to buy:
+        	idRequest();
+    		// Do I have to name the following answer1 and answer2?
         	}).then(function(answer) {
         		// The second message should ask how many units of the product they would like to buy.
-        		inquirer.prompt({
-        			name: 		"quantityRequest",
-        			type: 		"input",
-        			message: 	"Excellent choice. How many would you like to purchase?"
-        		})
+        		quantityRequest();
         	}).then(function(answer) {
-        		// Check if your store has enough of the product to meet the 
-        		// customer's request.
-        		// NOT SURE THIS IS CORRECT:
-        		var query = 'SELECT ItemID FROM Products';
-        		connection.query(query, [answer.ItemID, answer.StockQuantity], function(err, res) {
-        			if (answer.StockQuantity < 1) {
-        				console.log("Apologies -- you have selected an item that is out of stock. Could we interest you in something else instead?");
-        				// PREVENT THE ORDER FROM GOING THROUGH.
-        				// RESET.
-        			} else {
-        				// Fulfill order by updating this item's StockQuantity in the SQL 
-        				// database to reflect the remaining quantity.
-
-        				// Once the update goes through, show the customer the total cost 
-						// of their purchase.		
-        			}
-
-				
-				
-				})
+        		// Check if you have enough to meet the customer's request.
+        		checkStock();
 			})
-        })
+		})
+}
+
+// Display all items available to the customer:
+var showStock = function() {
+	console.log("Available Products: ");
+    for (var i = 0; i < res.length; i++) {
+        console.log(
+        	"ItemID: " res[i].ItemID + 
+        	" || Product: " + res[i].ProductName + 
+        	" || Price: " + res[i].Price + 
+        	" || Qty: " + res[i].Inventory
+        	);
+    }
+}
+
+// Q1: Ask user the ID of the product they would like to buy:
+var idRequest = function() {
+	inquirer.prompt({
+		// WHAT ARE THE RULES FOR THE NAME?
+		name: 		"itemID",
+		type: 		"input",
+		message: 	"Please enter the ID number of the product would you like to purchase:",
+		choices: [	"" /*DO I USE A FOR LOOP?*/
+		]
+	})
+}
+
+var quantityRequest = function() {
+	inquirer.prompt({
+		name: 		"quantityRequest",
+		type: 		"input",
+		message: 	"Excellent choice. How many would you like to purchase?"
+	})
+}
+
+// Check if you have enough to meet the customer's request.
+var checkStock = function() {
+	// NOT SURE THIS IS CORRECT:
+	if (answer.Inventory < 1) {
+		console.log("Apologies -- you have selected an item that is out of stock. Could we interest you in something else instead?");
+		// PREVENT THE ORDER FROM GOING THROUGH.  (aka DO NOTHING.)
+		// RESET.
+		runBamazon();
+	} else {
+		// Fulfill order by updating this item's Inventory in the SQL 
+		// database to reflect the remaining quantity.
+
+		// Once the update goes through, show the customer the total cost 
+		// of their purchase.		
+	}
 }
